@@ -67,19 +67,19 @@ In the code cell below, you will need to implement the following:
 
 ```python
 # TODO: Minimum price of the data
-minimum_price = data['MEDV'].min()
+minimum_price = np.min(prices)
 
 # TODO: Maximum price of the data
-maximum_price = data['MEDV'].max()
+maximum_price = np.max(prices)
 
 # TODO: Mean price of the data
-mean_price = data['MEDV'].mean()
+mean_price = np.mean(prices)
 
 # TODO: Median price of the data
-median_price = data['MEDV'].median()
+median_price = np.median(prices)
 
 # TODO: Standard deviation of prices of the data
-std_price = data['MEDV'].std()
+std_price = np.std(prices)
 
 # Show the calculated statistics
 print "Statistics for Boston housing dataset:\n"
@@ -96,7 +96,7 @@ print "Standard deviation of prices: ${:,.2f}".format(std_price)
     Maximum price: $1,024,800.00
     Mean price: $454,342.94
     Median price $438,900.00
-    Standard deviation of prices: $165,340.28
+    Standard deviation of prices: $165,171.13
     
 
 ### Question 1 - Feature Observation
@@ -115,7 +115,141 @@ Hint: Would you expect a home that has an 'RM' value of 6 be worth more or less 
 <br>As per my intuition, an increase in 'RM' and 'PTRATIO' will result in an increase in the 'MEDV' value. But, an increase in the 'LSTAT' value will decrease the 'MEDV' value significantly.<br />
 <br>For example, if a house has eight rooms and a nominal student to teacher ratio of 15.5 and the lower income class percentage to be 10% then the house prices will be lower in that area.<br />
 <br>In another example, if a house has the same eight rooms and the same student to teacher ratio of 15.5, but this time the lower income class percentage is 4% then the house prices will be higher than the previous example given above.<br />
+<br>Based on the output graphs and the correlation matrix shown below, we can see that 'RM' is positively correlated and other two features are negatively correlated.<br />
 </font>
+
+
+```python
+import matplotlib.pyplot as plt
+plt.plot(data['RM'], prices, 'o')
+plt.title('RM')
+plt.xlabel('RM')
+plt.ylabel('prices')
+```
+
+
+
+
+    <matplotlib.text.Text at 0xa0d8a90>
+
+
+
+
+![png](output_6_1.png)
+
+
+
+```python
+plt.plot(data['LSTAT'], prices, 'o')
+plt.title('LSTAT')
+plt.xlabel('LSTAT')
+plt.ylabel('prices')
+```
+
+
+
+
+    <matplotlib.text.Text at 0xa1e4270>
+
+
+
+
+![png](output_7_1.png)
+
+
+
+```python
+plt.plot(data['PTRATIO'], prices, 'o')
+plt.title('PTRATIO')
+plt.xlabel('PTRATIO')
+plt.ylabel('prices')
+```
+
+
+
+
+    <matplotlib.text.Text at 0xa1d53f0>
+
+
+
+
+![png](output_8_1.png)
+
+
+
+```python
+names = ['RM','LSTAT','PTRATIO','MEDV']
+correlations = data.corr()
+# plot correlation matrix
+fig = plt.figure()
+ax = fig.add_subplot(111)
+cax = ax.matshow(correlations, vmin=-1, vmax=1)
+fig.colorbar(cax)
+ticks = np.arange(0,4,1)
+ax.set_xticks(ticks)
+ax.set_yticks(ticks)
+ax.set_xticklabels(names)
+ax.set_yticklabels(names)
+plt.show()
+```
+
+
+![png](output_9_0.png)
+
+
+
+```python
+data.corr()
+```
+
+
+
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>RM</th>
+      <th>LSTAT</th>
+      <th>PTRATIO</th>
+      <th>MEDV</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>RM</th>
+      <td>1.000000</td>
+      <td>-0.612033</td>
+      <td>-0.304559</td>
+      <td>0.697209</td>
+    </tr>
+    <tr>
+      <th>LSTAT</th>
+      <td>-0.612033</td>
+      <td>1.000000</td>
+      <td>0.360445</td>
+      <td>-0.760670</td>
+    </tr>
+    <tr>
+      <th>PTRATIO</th>
+      <td>-0.304559</td>
+      <td>0.360445</td>
+      <td>1.000000</td>
+      <td>-0.519034</td>
+    </tr>
+    <tr>
+      <th>MEDV</th>
+      <td>0.697209</td>
+      <td>-0.760670</td>
+      <td>-0.519034</td>
+      <td>1.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
 
 ## Developing a Model
 In this second section of the project, you will develop the tools and techniques necessary for a model to make a prediction. Being able to make accurate evaluations of each model's performance through the use of these tools and techniques helps to greatly reinforce the confidence in your predictions.
@@ -171,8 +305,16 @@ print "Model has a coefficient of determination, R^2, of {:.3f}.".format(score)
     Model has a coefficient of determination, R^2, of 0.923.
     
 
+
+```python
+
+```
+
 **Answer:**
 <font color='blue'>
+<br>
+R-squared is the coefficient of determination which measures the closeness of the data to the regression line fitted by the model. R-squared value always lies between 0 to 1. Higher the value of R-squared means the model generated regression line fits the data.
+<br />
 <br>
 The model has successfully captured the variation in the target variable because it has a coefficient of determination of 92.3% which means the model was able to predict the target value almost 92.3% of the time accurately.
 <br />
@@ -239,7 +381,7 @@ vs.ModelLearning(features, prices)
 ```
 
 
-![png](output_16_0.png)
+![png](output_22_0.png)
 
 
 
@@ -303,7 +445,7 @@ ML(features, prices)
 ```
 
 
-![png](output_18_0.png)
+![png](output_24_0.png)
 
 
 ### Question 4 - Learning the Data
@@ -329,7 +471,7 @@ vs.ModelComplexity(X_train, y_train)
 ```
 
 
-![png](output_22_0.png)
+![png](output_28_0.png)
 
 
 ### Question 5 - Bias-Variance Tradeoff
@@ -341,9 +483,9 @@ Hint: How do you know when a model is suffering from high bias or high variance?
 <font color='blue'>
 <br> The model trained with a maximum depth of one has a 'high bias' which means that the model is under fitted and adding more data point will not help the model to improve its score. On the other hand, the model trained with a maximum depth of 10 has a 'high variance' which means the model is over fitted and this case adding more data point will help the model improve the score.<br /> 
 <br>
-One way to find out visually the cases of 'High Bias' and 'High Variance'  is to see the gap between the training and testing lines and the point of convergence. If you see a shorter gap between the lines after the convergence point then its a case of 'High Bias' and on the contrary, if you see the wider gap then its a case of 'High Variance'.<br />
+One way to find out visually the cases of 'High Bias' and 'High Variance' is to see the training and testing scores and the point of convergence or divergence. At max depth one the score for both training and testing line is very low and stays consistant at the same level (score of around .48 and .41) after the convergence point which is a case of 'High Bias' and on the contrary, in the case of 'High Variance' at max depth ten the scores for training and test were .67 and .97 and the lines were diverging from each other.<br />
 <br>
-Using the complexity graph, we can see that the model suffers both 'High Bias' and 'High Variance' on the two extremes of the model maximum depths.
+Using the complexity graph, we can see that the model suffers both 'High Bias' and 'High Variance' on the two extremes of the model maximum depths. And after the max_depth four the training score is at its highest point of .7882 and then its start to dip as more data points are added.
 <br />
 </font>
 
@@ -384,7 +526,9 @@ Hint: Much like the reasoning behind having a testing set, what could go wrong w
 
 **Answer:**
 <font color='blue'>
-<br> The k-fold cross validation training technique is used to include all the dataset available on hand in training and testing any learning algorithm. For example, let's say we have a dataset with 100 observations, and we decide to split it by 80/20 with a k-fold of 10. The technique will split the data in an 80/20 way ten times by not repeating the test set in all the ten iterations or folds. Finally, after the model is applied on every fold the results are averaged to get the final prediction.<br />
+<br> 
+k-fold cross-validation means the sample data will be divided into k folds. For example the in a 7-fold cross validation the sample data is divided into seven equal folds and the model is run for seven iterations, and in each iteration we use six folds to train the model and one fold to test the model. We will repeat the step seven times by selecting a new fold each time to test the model and rest of the folds to train the model. In the end, we can take the average of the metrics used in the model.
+<br />
 
 <br>Now using the k-fold cross validation training technique with grid search make the optimization much more effective and the results more reliable on the out of sample data. The main benefits of using k-fold in conjunction with grid search are that the parameters can be optimized over different training and testing dataset to find the optimal parameters value with maximum accuracy or minimum error. 
 <br />
@@ -507,11 +651,115 @@ for i, price in enumerate(reg.predict(client_data)):
 **Answer:**
 <font color='blue'>
 <br> The predicted prices are shown above as an output to line 32.<br />
+
+<br>Statistics for Boston housing dataset:<br/>
+<br>Minimum price: 105,000.00<br/>
+<br>Maximum price: 1,024,800.00<br/>
+<br>Mean price: 454,342.94<br/>
+<br>Median price 438,900.00<br/>
+<br>Standard deviation of prices: 165,171.13<br/>
+
 <br>
 Based on the summary statistics of the dataset we used to build the model we see that the predicted values are well within the 'MEDV' range.  And since the model was optimized on its parameters over a ten-fold training and testing dataset, we can be confident that the model is performing with high levels of accuracy in predicting the price.
 <br />
+<br>
+In the case of client one, there are five rooms - which is two standard deviations less than the average rooms in the dataset, 17% poverty level is in the 75th percentile and 15 to 1 student to teacher ratio is approx one standard deviation below the mean. As we can see most of the features are close to the average value, the price predicted by the model is also closer to the average of the prices of the dataset (Dollars 409,404.55).
+<br />
+
+<br>
+In the case of client two, there are four rooms - which is approximately the minimum value in the dataset, 32% poverty level is closer to the max value in the dataset and 22 to 1 student to teacher ratio is the maximum value in the dataset. As we can see in the positively correlated features if the value is close to the minimum value in the dataset and the negatively correlated value is closer to the max value in the dataset the model predicted the house prices closer to the minimum value of the dataset (Dollars 233,234.04).
+<br />
+
+<br>
+In the case of client three, there are eight rooms - which is approximately the maximum value in the dataset, 3% poverty level is closer to the minimum value in the dataset and 12 to 1 student to teacher ratio is the highest value in the dataset. As we can see the positively correlated feature value is close to the maximum value in the dataset and the negatively correlated value is closer to the lowest value in the dataset the model predicted the house prices closer to the maximum value of the dataset (Dollars 985,500.00).
+<br />
+
+
 </font>
 
+
+
+```python
+features.describe()
+```
+
+
+
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>RM</th>
+      <th>LSTAT</th>
+      <th>PTRATIO</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>489.000000</td>
+      <td>489.000000</td>
+      <td>489.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>6.240288</td>
+      <td>12.939632</td>
+      <td>18.516564</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>0.643650</td>
+      <td>7.081990</td>
+      <td>2.111268</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>3.561000</td>
+      <td>1.980000</td>
+      <td>12.600000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>5.880000</td>
+      <td>7.370000</td>
+      <td>17.400000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>6.185000</td>
+      <td>11.690000</td>
+      <td>19.100000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>6.575000</td>
+      <td>17.120000</td>
+      <td>20.200000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>8.398000</td>
+      <td>37.970000</td>
+      <td>22.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+
+```
+
+
+```python
+
+```
 
 ### Sensitivity
 An optimal model is not necessarily a robust model. Sometimes, a model is either too complex or too simple to sufficiently generalize to new data. Sometimes, a model could use a learning algorithm that is not appropriate for the structure of the data given. Other times, the data itself could be too noisy or contain too few samples to allow a model to adequately capture the target variable — i.e., the model is underfitted. Run the code cell below to run the fit_model function ten times with different training and testing sets to see how the prediction for a specific client changes with the data it's trained on.
